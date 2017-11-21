@@ -1,4 +1,4 @@
 # arne-android
 Attendance Recognition Notification Environment
 
-The application for the Arne system
+The android application for the Arne system
