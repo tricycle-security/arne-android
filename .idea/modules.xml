@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/arne-android.iml" filepath="$PROJECT_DIR$/arne-android.iml" />
-      <module fileurl="file://D:\repositories\arne-android\arne\app\src\main\main.iml" filepath="D:\repositories\arne-android\arne\app\src\main\main.iml" />
     </modules>
   </component>
 </project>
