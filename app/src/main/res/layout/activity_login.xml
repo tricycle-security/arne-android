@@ -3,8 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     android:fitsSystemWindows="true"
+    android:background="#26A4B3"
     tools:context="com.tricycle_sec.arne.arne.login.LoginActivity">
+
+    <ImageView
+        android:layout_width="124dp"
+        android:layout_height="124dp"
+        android:src="@drawable/ic_logowtfv3"
+        android:tint="#FFFFFF"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

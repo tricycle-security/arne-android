@@ -14,11 +14,14 @@ import com.firebase.ui.auth.ResultCodes
 import com.firebase.ui.auth.IdpResponse
 import android.content.Intent
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_home.*
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
 import com.tricycle_sec.arne.arne.firebase.Example
+import com.tricycle_sec.arne.arne.login.LoginActivity
 import java.security.spec.ECField
 
 class HomeActivity : BaseActivity() {
@@ -27,49 +30,39 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        button2.setOnClickListener {
-            val testobject = Example(editText.text.toString())
-            mDatabase.setValue(testobject)
-        }
-
+        readData()
     }
-   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_header, menu)
+        return super.onPrepareOptionsMenu(menu)
+    }
 
-            if (resultCode == ResultCodes.OK) {
-                // Successfully signed in
-                val user = FirebaseAuth.getInstance().currentUser
-                home.text = "succes"
-                readingData()
-
-            } else {
-                // Sign in failed, check response for error code
-                home.text = "fail"
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout -> {
+                FirebaseAuth.getInstance().signOut()
+                startActivity(Intent(this, LoginActivity::class.java))
             }
         }
+        return super.onOptionsItemSelected(item)
     }
 
-    private fun readingData(){
+    private fun readData(){
         val eventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d("DATA CHANGED", "ADDEDUSER LISTEN")
                 Log.d("DATA CHANGED", dataSnapshot.key)
                 val testobject = dataSnapshot.getValue<Example>(Example::class.java)
-                home.text = testobject!!.test
-
+                home.text = if (testobject != null) testobject.test else ""
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
-
-
         }
         mDatabase.addValueEventListener(eventListener)
-    }*/
+    }
 }
 
 
