@@ -18,19 +18,8 @@ import kotlinx.android.synthetic.main.activity_home.*
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
+import com.tricycle_sec.arne.arne.firebase.Example
 import java.security.spec.ECField
-
-
-private val RC_SIGN_IN = 123
-// Choose authentication providers
-var providers = Arrays.asList(
-        AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build())
-
-val mDatabase = FirebaseDatabase.getInstance().getReference("example/")
-
-class Example(test: String = "") {
-    var test = test
-}
 
 class HomeActivity : BaseActivity() {
 
@@ -38,23 +27,13 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-
-
-
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
-
         button2.setOnClickListener {
             val testobject = Example(editText.text.toString())
             mDatabase.setValue(testobject)
         }
 
     }
-    protected override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
@@ -90,7 +69,7 @@ class HomeActivity : BaseActivity() {
 
         }
         mDatabase.addValueEventListener(eventListener)
-    }
+    }*/
 }
 
 
