@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- FullScreen application theme. -->
+    <style name="FullScreenTheme" parent="Theme.AppCompat.NoActionBar">
+
+    </style>
+
 </resources>
