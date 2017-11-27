@@ -16,7 +16,7 @@ class LoginActivity : BaseActivity() {
         setContentView(R.layout.activity_login)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_SIGN_IN) {
@@ -43,6 +43,7 @@ class LoginActivity : BaseActivity() {
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
+                        .setAllowNewEmailAccounts(false)
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN)

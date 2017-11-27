@@ -3,26 +3,17 @@ package com.tricycle_sec.arne.arne.home
 import android.os.Bundle
 import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.firebase.ui.auth.AuthUI
-import java.util.*
-import java.util.Arrays.asList
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.firebase.ui.auth.ResultCodes
-import com.firebase.ui.auth.IdpResponse
 import android.content.Intent
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_home.*
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.firebase.Example
 import com.tricycle_sec.arne.arne.login.LoginActivity
-import java.security.spec.ECField
+import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity() {
 
@@ -30,7 +21,8 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        readData()
+        getExampleData()
+        getTestData()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
@@ -48,20 +40,44 @@ class HomeActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun readData(){
+    fun getExampleData() {
         val eventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d("DATA CHANGED", "ADDEDUSER LISTEN")
-                Log.d("DATA CHANGED", dataSnapshot.key)
-                val testobject = dataSnapshot.getValue<Example>(Example::class.java)
-                home.text = if (testobject != null) testobject.test else ""
+                val homeText = dataSnapshot.getValue(Example::class.java)?.test
+                example_text.text =  if(homeText != null) homeText else ""
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
         }
-        mDatabase.addValueEventListener(eventListener)
+        getDatabaseReference(EXAMPLE_PATH).addValueEventListener(eventListener)
+    }
+
+    fun getTestData() {
+        val eventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                test_text.text =  dataSnapshot.value as String
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        }
+        getDatabaseReference(TEST_PATH).addValueEventListener(eventListener)
+    }
+
+    fun getCurrentStatus() {
+        val eventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                test_text.text =  dataSnapshot.getValue(CurrentStatus::class.java).uuid
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        }
+        getDatabaseReference(STATUS_PATH).addValueEventListener(eventListener)
     }
 }
 
