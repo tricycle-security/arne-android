@@ -13,7 +13,7 @@ open class BaseActivity : AppCompatActivity() {
         val providers = Arrays.asList(AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build())
         val EXAMPLE_PATH = "example/"
         val TEST_PATH = "test/test"
-        val USER_PATH = "userinfo/usergeninfo/"
+        val USER_PATH = "userinfo/usergeninfo"
         val STATUS_PATH = "currentstatus/"
     }
 

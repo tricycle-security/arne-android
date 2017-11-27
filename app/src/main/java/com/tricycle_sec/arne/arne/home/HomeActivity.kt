@@ -5,9 +5,9 @@ import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.google.firebase.auth.FirebaseAuth
 import android.content.Intent
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -17,17 +17,21 @@ import com.tricycle_sec.arne.arne.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import com.google.firebase.database.ChildEventListener
 import com.tricycle_sec.arne.arne.firebase.UserGeneralInfo
-import java.sql.SQLOutput
+import kotlinx.android.synthetic.main.attendancy_item.view.*
 
 
 class HomeActivity : BaseActivity() {
+
+    private var adapter : AttendancyAdapter = AttendancyAdapter(mutableListOf(), mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        getExampleData()
-        getTestData()
+        recycler_view.layoutManager = LinearLayoutManager(this)
+
+        //getExampleData()
+        //getTestData()
         getCurrentStatuss()
         getUsersGeneralInfo()
     }
@@ -51,7 +55,7 @@ class HomeActivity : BaseActivity() {
         val eventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val homeText = dataSnapshot.getValue(Example::class.java)?.test
-                example_text.text =  if(homeText != null) homeText else ""
+                //example_text.text =  if(homeText != null) homeText else ""
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -64,7 +68,7 @@ class HomeActivity : BaseActivity() {
     fun getTestData() {
         val eventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                test_text.text =  dataSnapshot.value as String
+                //test_text.text =  dataSnapshot.value as String
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -76,28 +80,18 @@ class HomeActivity : BaseActivity() {
 
     fun getUsersGeneralInfo() {
         val ref = getDatabaseReference(USER_PATH)
-        ref.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val addedUser = dataSnapshot.getValue<UserGeneralInfo>(UserGeneralInfo::class.java)
-                if (addedUser != null) {
-                    println("addeduser: " + addedUser.fname)
-                    println("addeduser: " + addedUser.lname)
-                }
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val users = dataSnapshot.value
+                println(users)
+                //adapter = AttendancyAdapter(mutableListOf(users), null)
+                recycler_view.adapter = adapter
             }
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val changeduser = dataSnapshot.getValue<UserGeneralInfo>(UserGeneralInfo::class.java)
-                if (changeduser != null) {
-                    println("changeduser: " + changeduser.fname)
-                    println("changeduser: " + changeduser.lname)
-                }
+            override fun onCancelled(p0: DatabaseError?) {
+
             }
 
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
-
-            override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String) {}
-
-            override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
 
@@ -127,6 +121,28 @@ class HomeActivity : BaseActivity() {
             override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
+
+    inner class AttendancyAdapter(val users: MutableList<UserGeneralInfo>?, val statuses: MutableList<CurrentStatus>?) : RecyclerView.Adapter<AttendanceViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceViewHolder {
+            val view = layoutInflater.inflate(R.layout.attendancy_item, parent, false)
+            return AttendanceViewHolder(view)
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            return 0
+        }
+
+        override fun onBindViewHolder(holder: AttendanceViewHolder, position: Int) {
+            holder.view.name.text = getUsers(position).fname
+            println(position)
+        }
+
+        override fun getItemCount() = if(users != null) users.count() else 0
+        fun getUsers(position: Int) = users!![position]
+    }
+
+    inner class AttendanceViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 }
 
 
