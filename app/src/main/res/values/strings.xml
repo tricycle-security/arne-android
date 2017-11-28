@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Arne</string>
+    <string name="privacy_url">https://www.tricycle-sec.nl/arne/privacy</string>
 </resources>
