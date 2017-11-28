@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Arne</string>
     <string name="privacy_url">https://www.tricycle-sec.nl/arne/privacy</string>
+
+    <string name="title_attendancy">Aanwezigheid</string>
+    <string name="title_checkout">Uitchecken</string>
+
+    <string name="side_menu_logout">Uitloggen</string>
+    <string name="side_menu_checkout">Kaart uitchecken</string>
+
 </resources>

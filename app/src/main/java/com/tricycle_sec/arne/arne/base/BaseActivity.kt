@@ -14,9 +14,6 @@ open class BaseActivity : AppCompatActivity() {
         val STATUS_PATH = "currentstatus/"
     }
 
-    override fun onBackPressed() {
-    }
-
     fun getDatabaseReference(path: String) : DatabaseReference {
         return FirebaseDatabase.getInstance().getReference(path)
     }

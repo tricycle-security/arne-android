@@ -2,9 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Algemeen">
+
+        <item
+            android:id="@+id/nav_menu_checkout"
+            android:icon="@drawable/ic_card"
+            android:title="@string/side_menu_checkout" />
         <item
             android:id="@+id/nav_menu_logout"
             android:icon="@drawable/ic_exit"
-            android:title="Logout" />
+            android:title="@string/side_menu_logout" />
     </item>
 </menu>
