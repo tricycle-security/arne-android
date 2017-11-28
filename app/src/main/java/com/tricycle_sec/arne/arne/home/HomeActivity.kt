@@ -41,7 +41,7 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
         content_frame.layoutManager = LinearLayoutManager(this)
         content_frame.adapter = adapter
 
-        getCurrentStatuss()
+        getCurrentStatuses()
         getUsersGeneralInfo()
     }
 
@@ -91,7 +91,7 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
         })
     }
 
-    fun getCurrentStatuss() {
+    fun getCurrentStatuses() {
         val ref = getDatabaseReference(STATUS_PATH)
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
