@@ -3,6 +3,7 @@ package com.tricycle_sec.arne.arne.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.tricycle_sec.arne.arne.R
@@ -43,6 +44,7 @@ class LoginActivity : BaseActivity() {
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
+                        .setPrivacyPolicyUrl(getString(R.string.privacy_url))
                         .setAllowNewEmailAccounts(false)
                         .setAvailableProviders(providers)
                         .build(),
