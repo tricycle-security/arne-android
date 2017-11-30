@@ -5,6 +5,7 @@ import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
+import com.tricycle_sec.arne.arne.checkout.CheckoutActivity
 import com.tricycle_sec.arne.arne.login.LoginActivity
 
 class NavigationDrawerHandler {
@@ -16,6 +17,7 @@ class NavigationDrawerHandler {
                 FirebaseAuth.getInstance().signOut()
                 activity.startActivity(Intent(activity, LoginActivity::class.java))
             }
+            R.id.nav_menu_checkout -> activity.startActivity(Intent(activity, CheckoutActivity::class.java))
             else -> {
             }
         }

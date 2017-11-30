@@ -31,6 +31,7 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
         setContentView(R.layout.activity_home)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setTitle(getString(R.string.title_attendancy))
 
         actionBarDrawerToggle = ActionBarDrawerToggle(this, drawer_layout, R.string.app_name, R.string.app_name)
         actionBarDrawerToggle.isDrawerIndicatorEnabled = true
@@ -121,6 +122,8 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
             override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
+
+    override fun onBackPressed() {}
 
     inner class AttendancyAdapter(val users: HashMap<String, UserAttendenceStatus>) : RecyclerView.Adapter<AttendanceViewHolder>() {
 

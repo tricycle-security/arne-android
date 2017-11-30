@@ -11,7 +11,9 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_margin="16dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +27,7 @@
             android:src="@drawable/ic_check"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="32dp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -34,7 +36,8 @@
             android:src="@drawable/ic_cancel"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="32dp"/>
 
     </RelativeLayout>
+    <include layout="@layout/divider"/>
 </LinearLayout>

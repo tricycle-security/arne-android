@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Arne</string>
+    <string name="privacy_url">https://www.tricycle-sec.nl/arne/privacy</string>
+
+    <string name="title_attendancy">Attendancy</string>
+    <string name="title_checkout">Checkout</string>
+
+    <string name="side_menu_logout">Logout</string>
+    <string name="side_menu_checkout">Checkout card</string>
+
+    <string name="checkout_description">Here you can see if your card is checked in. By clicking on the card it will be checked out. Please only use this feature if you forgot to check out on location.</string>
+    <string name="checkout_disclamer">Warning! Checking in is not possible.</string>
+    <string name="checkout_warning">Are you sure you want to check out now?</string>
+    <string name="checkout_warning_title">Warning!</string>
+
+    <string name="positive">Yes</string>
+    <string name="negative">No</string>
+
+</resources>
