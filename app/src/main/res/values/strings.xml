@@ -8,4 +8,11 @@
     <string name="side_menu_logout">Uitloggen</string>
     <string name="side_menu_checkout">Kaart uitchecken</string>
 
+    <string name="checkout_description">Hier kun je zien of jouw kaart ingecheckt is. Door op de kaart te tikken wordt de kaart uitgecheckt. Gelieve alleen te gebruiken als je bent vergeten uit te checken op locatie.</string>
+    <string name="checkout_disclamer">Let op! Inchecken via de app is niet mogelijk.</string>
+    <string name="checkout_warning">Weet je zeker dat je de kaart wilt uitchecken?</string>
+    <string name="checkout_warning_title">Let op!</string>
+
+    <string name="positive">Ja</string>
+    <string name="negative">Nee</string>
 </resources>
