@@ -1,7 +1,6 @@
 package com.tricycle_sec.arne.arne.services
 
 import android.app.IntentService
-import android.app.Notification
 import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import com.tricycle_sec.arne.arne.R
@@ -10,21 +9,20 @@ import android.app.PendingIntent
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
-import android.app.NotificationChannel
-import android.os.Build
+import android.content.ComponentName
+import android.widget.RemoteViews
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.firebase.Alert
-import com.tricycle_sec.arne.arne.firebase.CurrentStatus
-import java.util.*
-
 
 class NotificationService : IntentService("NotificationService") {
 
-    private var status: Boolean = true
+    companion object {
+        var status: Boolean = true
+    }
 
     override fun onHandleIntent(intent: Intent?) {
 
@@ -44,9 +42,17 @@ class NotificationService : IntentService("NotificationService") {
                     val channelId = "channel_01"
                     val alertText = String.format("%s \nLocatie: %s", alert.description, alert.location)
 
+                    val contentView = RemoteViews(packageName, R.layout.custom_notification)
+                    contentView.setTextViewText(R.id.title, alert.kind)
+                    contentView.setTextViewText(R.id.description, alertText)
+
                     val notification = NotificationCompat.Builder(this@NotificationService)
                             .setSmallIcon(R.drawable.ic_priority_high)
-                            .setStyle(NotificationCompat.BigTextStyle().bigText(alertText).setBigContentTitle(alert.kind))
+                            .setCustomBigContentView(contentView)
+                            .setAutoCancel(false)
+                            .setOngoing(true)
+                            .setContentTitle(alert.kind)
+                            .setContentText(alertText)
                             .setVibrate(longArrayOf(1000, 2000, 3000, 4000, 5000))
                             .setLights(Color.RED, 500, 500)
                             .setPriority(NotificationCompat.PRIORITY_MAX)
