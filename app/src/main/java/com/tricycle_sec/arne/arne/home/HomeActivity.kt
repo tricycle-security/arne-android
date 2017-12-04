@@ -1,5 +1,6 @@
 package com.tricycle_sec.arne.arne.home
 
+import android.content.Intent
 import android.os.Bundle
 import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
@@ -17,6 +18,7 @@ import com.google.firebase.database.ChildEventListener
 import com.tricycle_sec.arne.arne.firebase.UserAttendenceStatus
 import com.tricycle_sec.arne.arne.firebase.UserGeneralInfo
 import com.tricycle_sec.arne.arne.handlers.NavigationDrawerHandler
+import com.tricycle_sec.arne.arne.services.NotificationService
 import kotlinx.android.synthetic.main.attendancy_item.view.*
 
 class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedListener {
@@ -26,12 +28,19 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
     private var navigationDrawerHandler = NavigationDrawerHandler()
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
 
+    companion object {
+        lateinit var notificationIntent: Intent
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setTitle(getString(R.string.title_attendancy))
+
+        notificationIntent = Intent(this, NotificationService::class.java)
+        startService(notificationIntent)
 
         actionBarDrawerToggle = ActionBarDrawerToggle(this, drawer_layout, R.string.app_name, R.string.app_name)
         actionBarDrawerToggle.isDrawerIndicatorEnabled = true

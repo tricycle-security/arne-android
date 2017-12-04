@@ -1,7 +1,5 @@
 package com.tricycle_sec.arne.arne.base
 
-import android.content.Context
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.database.*
@@ -14,6 +12,7 @@ open class BaseActivity : AppCompatActivity() {
         val providers = Arrays.asList(AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build())
         val USER_PATH = "userinfo/usergeninfo"
         val STATUS_PATH = "currentstatus/"
+        val ALERT_PATH = "alerts/"
     }
 
     fun getDatabaseReference(path: String) : DatabaseReference {

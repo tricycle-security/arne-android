@@ -6,7 +6,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.checkout.CheckoutActivity
+import com.tricycle_sec.arne.arne.home.HomeActivity
 import com.tricycle_sec.arne.arne.login.LoginActivity
+import com.tricycle_sec.arne.arne.services.NotificationService
 
 class NavigationDrawerHandler {
 
@@ -14,6 +16,7 @@ class NavigationDrawerHandler {
 
         when (item.itemId) {
             R.id.nav_menu_logout -> {
+                activity.stopService(HomeActivity.notificationIntent)
                 FirebaseAuth.getInstance().signOut()
                 activity.startActivity(Intent(activity, LoginActivity::class.java))
             }

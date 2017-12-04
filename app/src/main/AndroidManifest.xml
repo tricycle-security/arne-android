@@ -21,9 +21,15 @@
         <activity
             android:name=".home.HomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".checkout.CheckoutActivity"
+        <activity
+            android:name=".checkout.CheckoutActivity"
             android:parentActivityName=".home.HomeActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".services.NotificationService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>
