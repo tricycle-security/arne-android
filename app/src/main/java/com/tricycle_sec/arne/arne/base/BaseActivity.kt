@@ -13,6 +13,7 @@ open class BaseActivity : AppCompatActivity() {
         val USER_PATH = "userinfo/usergeninfo"
         val STATUS_PATH = "currentstatus/"
         val ALERT_PATH = "alerts/"
+        val RESPONSE_PATH = "alerts/%s/responders/%s"
     }
 
     fun getDatabaseReference(path: String) : DatabaseReference {
