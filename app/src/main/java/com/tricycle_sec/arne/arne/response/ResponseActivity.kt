@@ -3,6 +3,7 @@ package com.tricycle_sec.arne.arne.response
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.Html
+import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.tricycle_sec.arne.arne.R
@@ -45,8 +46,11 @@ class ResponseActivity : BaseActivity() {
                 .setTitle(getString(R.string.response_warning_title))
                 .setMessage(message)
                 .setNegativeButton(getString(R.string.negative), {dialog, which -> dialog.dismiss()})
-                .setPositiveButton(getString(R.string.positive), { dialog, which ->  reference.setValue(Response(responding, System.currentTimeMillis(), currentUser.uid))
-                    dialog.dismiss()})
+                .setPositiveButton(getString(R.string.positive), { dialog, which -> reference.setValue(Response(responding, System.currentTimeMillis(), currentUser.uid))
+                    dialog.dismiss()
+                    completed_text.text = if(responding) getString(R.string.response_completed_true) else getString(R.string.response_completed_false)
+                    completed_text.visibility = View.VISIBLE
+                    button_layout.visibility = View.GONE})
                 .create()
                 .show()
     }

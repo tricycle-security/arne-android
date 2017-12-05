@@ -4,13 +4,10 @@ import android.app.IntentService
 import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import com.tricycle_sec.arne.arne.R
-import com.tricycle_sec.arne.arne.home.HomeActivity
 import android.app.PendingIntent
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
-import android.content.ComponentName
-import android.support.v4.app.BundleCompat
 import android.widget.RemoteViews
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -20,6 +17,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.firebase.Alert
+import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.response.ResponseActivity
 
 class NotificationService : IntentService("NotificationService") {
@@ -27,6 +25,7 @@ class NotificationService : IntentService("NotificationService") {
     companion object {
         var status: Boolean = true
         val ALERT = "ALERT"
+        val currentUser = FirebaseAuth.getInstance().currentUser as FirebaseUser
     }
 
     override fun onHandleIntent(intent: Intent?) {
@@ -35,6 +34,39 @@ class NotificationService : IntentService("NotificationService") {
             return
         }
 
+        checkIfUserIsOnLocation()
+    }
+
+    override fun onDestroy() {
+        status = false
+        super.onDestroy()
+    }
+
+    private fun checkIfUserIsOnLocation(){
+        val ref = FirebaseDatabase.getInstance().getReference(BaseActivity.STATUS_PATH)
+        ref.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)
+                if(userStatus != null) {
+                    if(userStatus.uuid.equals(currentUser.uid)) {
+                        if(userStatus.onLocation) {
+                            notifyUser()
+                        }
+                    }
+                }
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String) {}
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    private fun notifyUser() {
         val reference = FirebaseDatabase.getInstance().getReference(BaseActivity.ALERT_PATH)
         reference.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
@@ -44,7 +76,6 @@ class NotificationService : IntentService("NotificationService") {
                     val intent = Intent(this@NotificationService, ResponseActivity::class.java)
                     intent.putExtra(ALERT, alert)
 
-                    val currentUser = FirebaseAuth.getInstance().currentUser as FirebaseUser
                     val resultPendingIntent = PendingIntent.getActivity(this@NotificationService, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
                     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     val channelId = "channel_01"
@@ -84,10 +115,5 @@ class NotificationService : IntentService("NotificationService") {
 
             override fun onCancelled(databaseError: DatabaseError) {}
         })
-    }
-
-    override fun onDestroy() {
-        status = false
-        super.onDestroy()
     }
 }
