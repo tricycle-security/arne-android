@@ -1,13 +1,12 @@
 package com.tricycle_sec.arne.arne.services
 
-import android.app.IntentService
+import android.app.*
 import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import com.tricycle_sec.arne.arne.R
-import android.app.PendingIntent
-import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.widget.RemoteViews
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -37,6 +36,10 @@ class NotificationService : IntentService("NotificationService") {
         checkIfUserIsOnLocation()
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return super.onStartCommand(intent, Service.START_STICKY_COMPATIBILITY, startId)
+    }
+
     override fun onDestroy() {
         status = false
         super.onDestroy()
@@ -56,7 +59,16 @@ class NotificationService : IntentService("NotificationService") {
                 }
             }
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
+            override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)
+                if(userStatus != null) {
+                    if(userStatus.uuid.equals(currentUser.uid)) {
+                        if(userStatus.onLocation) {
+                            notifyUser()
+                        }
+                    }
+                }
+            }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
 
@@ -99,6 +111,11 @@ class NotificationService : IntentService("NotificationService") {
                             .setChannelId(channelId)
 
                     notification.setContentIntent(resultPendingIntent)
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        notificationManager.createNotificationChannel(NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_HIGH))
+                    }
+
                     if(!responded) {
                         notificationManager.notify(alert.time.toInt(), notification.build())
                     }

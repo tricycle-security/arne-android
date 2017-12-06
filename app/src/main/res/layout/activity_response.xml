@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/reject_button"
                 android:layout_centerInParent="true"
-                android:background="@color/android_default_background"
+                android:background="@color/transparant"
                 android:src="@drawable/ic_reject" />
 
             <TextView
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/accept_button"
                 android:layout_centerInParent="true"
-                android:background="@color/android_default_background"
+                android:background="@color/transparant"
                 android:src="@drawable/ic_accept" />
 
             <TextView
