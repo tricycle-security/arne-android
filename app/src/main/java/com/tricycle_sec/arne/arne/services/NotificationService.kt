@@ -16,7 +16,6 @@ import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.firebase.Alert
 import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.response.ResponseActivity
-import android.media.RingtoneManager
 import android.net.Uri
 import android.media.AudioManager
 
@@ -117,6 +116,7 @@ class NotificationService : Service() {
             val alertText = String.format("%s \nLocatie: %s", alert.description, alert.location)
 
             val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
             manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
 
             val contentView = RemoteViews(packageName, R.layout.custom_notification)
@@ -147,7 +147,6 @@ class NotificationService : Service() {
             buildedNotification.flags += Notification.FLAG_ONGOING_EVENT
             buildedNotification.flags += Notification.FLAG_AUTO_CANCEL
             notificationManager.notify(alert.time.toInt(), buildedNotification)
-
         }
     }
 }

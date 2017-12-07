@@ -1,10 +1,15 @@
 package com.tricycle_sec.arne.arne.home
 
+import android.app.NotificationManager
+import android.app.Service
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import android.support.design.widget.NavigationView
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.LinearLayoutManager
@@ -38,6 +43,12 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setTitle(getString(R.string.title_attendancy))
+
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_NOTIFICATION_POLICY) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                startActivity(Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+            }
+        }
 
         notificationIntent = Intent(this, NotificationService::class.java)
         startService(notificationIntent)
