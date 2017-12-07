@@ -7,6 +7,7 @@ import com.tricycle_sec.arne.arne.R
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
+import android.os.IBinder
 import android.widget.RemoteViews
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,7 +17,7 @@ import com.tricycle_sec.arne.arne.firebase.Alert
 import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.response.ResponseActivity
 
-class NotificationService : IntentService("NotificationService") {
+class NotificationService : Service() {
 
     private val alertListener : ChildEventListener =  object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
@@ -46,12 +47,15 @@ class NotificationService : IntentService("NotificationService") {
         val currentUser = FirebaseAuth.getInstance().currentUser as FirebaseUser
     }
 
-    override fun onHandleIntent(intent: Intent) {
-        if(!status) {
-            return
-        }
+    override fun onBind(intent: Intent): IBinder? {
+        return null
+    }
 
-        onLocationListener()
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if(status) {
+            onLocationListener()
+        }
+        return Service.START_STICKY
     }
 
     private fun onLocationListener() {
