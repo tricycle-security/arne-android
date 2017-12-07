@@ -18,10 +18,6 @@ import com.tricycle_sec.arne.arne.response.ResponseActivity
 
 class NotificationService : IntentService("NotificationService") {
 
-
-
-
-//  sorry
     private val alertListener : ChildEventListener =  object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)
@@ -31,6 +27,10 @@ class NotificationService : IntentService("NotificationService") {
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)
+            if(!alert!!.responders.containsKey(currentUser.uid)){
+                notifyUser(alert!!)
+            }
         }
 
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
@@ -40,21 +40,18 @@ class NotificationService : IntentService("NotificationService") {
         override fun onCancelled(databaseError: DatabaseError) {}
     }
 
-
     companion object {
         var status: Boolean = true
         val ALERT = "ALERT"
         val currentUser = FirebaseAuth.getInstance().currentUser as FirebaseUser
     }
 
-    override fun onHandleIntent(intent: Intent?) {
-
+    override fun onHandleIntent(intent: Intent) {
         if(!status) {
             return
         }
 
         onLocationListener()
-
     }
 
     private fun onLocationListener() {
@@ -107,7 +104,6 @@ class NotificationService : IntentService("NotificationService") {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channelId = "channel_01"
             val alertText = String.format("%s \nLocatie: %s", alert.description, alert.location)
-//            val responded = alert.responders.contains(currentUser.uid)
 
             val contentView = RemoteViews(packageName, R.layout.custom_notification)
             contentView.setTextViewText(R.id.title, alert.kind)
@@ -135,7 +131,4 @@ class NotificationService : IntentService("NotificationService") {
 
         }
     }
-
-
-
 }

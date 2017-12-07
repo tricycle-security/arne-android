@@ -32,7 +32,8 @@
             android:exported="false" />
 
         <activity android:name=".response.ResponseActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:parentActivityName=".home.HomeActivity"/>
     </application>
 
 </manifest>

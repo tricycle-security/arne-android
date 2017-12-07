@@ -23,6 +23,8 @@ class ResponseActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_response)
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         alert = intent.getSerializableExtra(NotificationService.ALERT) as Alert
 
         val sdf = SimpleDateFormat("hh:mm:ss")
