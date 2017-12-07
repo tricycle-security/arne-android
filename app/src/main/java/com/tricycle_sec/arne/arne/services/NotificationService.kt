@@ -16,6 +16,12 @@ import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.firebase.Alert
 import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.response.ResponseActivity
+import android.media.RingtoneManager
+import android.net.Uri
+import android.media.AudioManager
+
+
+
 
 class NotificationService : Service() {
 
@@ -106,8 +112,12 @@ class NotificationService : Service() {
 
             val resultPendingIntent = PendingIntent.getActivity(this@NotificationService, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val sound = Uri.parse("android.resource://" + packageName + "/" + R.raw.alarm)
             val channelId = "channel_01"
             val alertText = String.format("%s \nLocatie: %s", alert.description, alert.location)
+
+            val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
 
             val contentView = RemoteViews(packageName, R.layout.custom_notification)
             contentView.setTextViewText(R.id.title, alert.kind)
@@ -121,6 +131,7 @@ class NotificationService : Service() {
                     .setContentTitle(alert.kind)
                     .setContentText(alertText)
                     .setVibrate(longArrayOf(1000, 2000, 3000, 4000, 5000))
+                    .setSound(sound)
                     .setLights(Color.RED, 500, 500)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
                     .setChannelId(channelId)
@@ -131,7 +142,11 @@ class NotificationService : Service() {
                 notificationManager.createNotificationChannel(NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_HIGH))
             }
 
-            notificationManager.notify(alert.time.toInt(), notification.build())
+            val buildedNotification = notification.build()
+            buildedNotification.flags = Notification.FLAG_INSISTENT
+            buildedNotification.flags += Notification.FLAG_ONGOING_EVENT
+            buildedNotification.flags += Notification.FLAG_AUTO_CANCEL
+            notificationManager.notify(alert.time.toInt(), buildedNotification)
 
         }
     }

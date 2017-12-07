@@ -1,5 +1,7 @@
 package com.tricycle_sec.arne.arne.response
 
+import android.content.Context
+import android.media.AudioManager
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.Html
@@ -24,6 +26,9 @@ class ResponseActivity : BaseActivity() {
         setContentView(R.layout.activity_response)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, AudioManager.FLAG_PLAY_SOUND)
 
         alert = intent.getSerializableExtra(NotificationService.ALERT) as Alert
 
