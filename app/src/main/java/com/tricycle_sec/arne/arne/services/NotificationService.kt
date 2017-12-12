@@ -1,10 +1,12 @@
 package com.tricycle_sec.arne.arne.services
 
+import android.Manifest
 import android.app.*
 import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import com.tricycle_sec.arne.arne.R
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
@@ -18,8 +20,10 @@ import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.response.ResponseActivity
 import android.net.Uri
 import android.media.AudioManager
-
-
+import android.support.v4.content.ContextCompat
+import com.greysonparrelli.permiso.Permiso
+import com.tricycle_sec.arne.arne.permissions.Permissions
+import java.io.Serializable
 
 
 class NotificationService : Service() {
@@ -28,14 +32,14 @@ class NotificationService : Service() {
         override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)
             if(!alert!!.responders.containsKey(currentUser.uid)){
-                notifyUser(alert!!)
+                notifyUser(alert)
             }
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)
             if(!alert!!.responders.containsKey(currentUser.uid)){
-                notifyUser(alert!!)
+                notifyUser(alert)
             }
         }
 
@@ -116,8 +120,17 @@ class NotificationService : Service() {
             val alertText = String.format("%s \nLocatie: %s", alert.description, alert.location)
 
             val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-            manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val granted = ContextCompat.checkSelfPermission(this, android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) == PackageManager.PERMISSION_GRANTED
+                if (granted) {
+                    manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                    manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
+                }
+            }else {
+                manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
+            }
 
             val contentView = RemoteViews(packageName, R.layout.custom_notification)
             contentView.setTextViewText(R.id.title, alert.kind)

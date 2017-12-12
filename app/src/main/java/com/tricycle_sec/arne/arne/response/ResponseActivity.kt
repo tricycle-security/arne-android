@@ -1,7 +1,9 @@
 package com.tricycle_sec.arne.arne.response
 
+import android.Manifest
 import android.content.Context
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.Html
@@ -12,6 +14,7 @@ import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.firebase.Alert
 import com.tricycle_sec.arne.arne.firebase.Response
+import com.tricycle_sec.arne.arne.permissions.Permissions
 import com.tricycle_sec.arne.arne.services.NotificationService
 import kotlinx.android.synthetic.main.activity_response.*
 import java.text.SimpleDateFormat
@@ -28,7 +31,14 @@ class ResponseActivity : BaseActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, AudioManager.FLAG_PLAY_SOUND)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Permissions.isGranted(this, android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)) {
+                manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, AudioManager.FLAG_PLAY_SOUND)
+            }
+        }else {
+            manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 0, AudioManager.FLAG_PLAY_SOUND)
+        }
 
         alert = intent.getSerializableExtra(NotificationService.ALERT) as Alert
 

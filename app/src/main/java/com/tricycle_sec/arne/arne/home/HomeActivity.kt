@@ -1,15 +1,12 @@
 package com.tricycle_sec.arne.arne.home
 
-import android.app.NotificationManager
-import android.app.Service
+import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import android.support.design.widget.NavigationView
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.LinearLayoutManager
@@ -20,16 +17,21 @@ import com.google.firebase.database.DatabaseError
 import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import kotlinx.android.synthetic.main.activity_home.*
 import com.google.firebase.database.ChildEventListener
+import com.greysonparrelli.permiso.PermisoActivity
 import com.tricycle_sec.arne.arne.firebase.UserAttendenceStatus
 import com.tricycle_sec.arne.arne.firebase.UserGeneralInfo
 import com.tricycle_sec.arne.arne.handlers.NavigationDrawerHandler
+import com.tricycle_sec.arne.arne.permissions.Permissions
 import com.tricycle_sec.arne.arne.services.NotificationService
 import kotlinx.android.synthetic.main.attendancy_item.view.*
+import android.support.v4.app.ActivityCompat.startActivityForResult
 
-class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedListener {
+
+
+class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val myMap = HashMap<String, UserAttendenceStatus>()
-    private var adapter : AttendancyAdapter = AttendancyAdapter(myMap)
+    private var adapter: AttendancyAdapter = AttendancyAdapter(myMap)
     private var navigationDrawerHandler = NavigationDrawerHandler()
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
 
@@ -44,13 +46,8 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setTitle(getString(R.string.title_attendancy))
 
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_NOTIFICATION_POLICY) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                startActivity(Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
-            }
-        }
-
         notificationIntent = Intent(this, NotificationService::class.java)
+
         startService(notificationIntent)
 
         actionBarDrawerToggle = ActionBarDrawerToggle(this, drawer_layout, R.string.app_name, R.string.app_name)
@@ -59,7 +56,7 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
         navigation_view.setNavigationItemSelectedListener(this)
         actionBarDrawerToggle.syncState()
 
-        content_frame.layoutManager = LinearLayoutManager(this)
+        content_frame.layoutManager = LinearLayoutManager(this@HomeActivity)
         content_frame.adapter = adapter
 
         getCurrentStatuses()
@@ -85,7 +82,7 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
                 val addedUser = dataSnapshot.getValue<UserGeneralInfo>(UserGeneralInfo::class.java)
                 if (addedUser != null) {
-                    if(!myMap.containsKey(addedUser.uuid)){
+                    if (!myMap.containsKey(addedUser.uuid)) {
                         myMap[addedUser.uuid] = UserAttendenceStatus()
                     }
                     myMap[addedUser.uuid]!!.fname = addedUser.fname
@@ -118,7 +115,7 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
                 val addedUser = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)
                 if (addedUser != null) {
-                    if(!myMap.containsKey(addedUser.uuid)){
+                    if (!myMap.containsKey(addedUser.uuid)) {
                         myMap[addedUser.uuid] = UserAttendenceStatus()
                     }
                     myMap[addedUser.uuid]!!.onLocation = addedUser.onLocation
@@ -160,14 +157,14 @@ class HomeActivity : BaseActivity() , NavigationView.OnNavigationItemSelectedLis
             val userList = ArrayList(users.values)
             userList.sortBy { !it.onLocation }
 
-            if(itemCount != 0) {
-                holder.view.name.text = String.format("%s %s", userList[position].fname , userList[position].lname)
-                holder.view.attendant_mark.visibility = if(userList[position].onLocation) View.VISIBLE else View.GONE
-                holder.view.not_attendant_mark.visibility = if(userList[position].onLocation) View.GONE else View.VISIBLE
+            if (itemCount != 0) {
+                holder.view.name.text = String.format("%s %s", userList[position].fname, userList[position].lname)
+                holder.view.attendant_mark.visibility = if (userList[position].onLocation) View.VISIBLE else View.GONE
+                holder.view.not_attendant_mark.visibility = if (userList[position].onLocation) View.GONE else View.VISIBLE
             }
         }
 
-        override fun getItemCount() = if(users != null) users.count() else 0
+        override fun getItemCount() = if (users != null) users.count() else 0
     }
 
     inner class AttendanceViewHolder(val view: View) : RecyclerView.ViewHolder(view)
