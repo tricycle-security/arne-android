@@ -1,6 +1,5 @@
 package com.tricycle_sec.arne.arne.home
 
-import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -17,15 +16,13 @@ import com.google.firebase.database.DatabaseError
 import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import kotlinx.android.synthetic.main.activity_home.*
 import com.google.firebase.database.ChildEventListener
-import com.greysonparrelli.permiso.PermisoActivity
 import com.tricycle_sec.arne.arne.firebase.UserAttendenceStatus
 import com.tricycle_sec.arne.arne.firebase.UserGeneralInfo
 import com.tricycle_sec.arne.arne.handlers.NavigationDrawerHandler
-import com.tricycle_sec.arne.arne.permissions.Permissions
 import com.tricycle_sec.arne.arne.services.NotificationService
 import kotlinx.android.synthetic.main.attendancy_item.view.*
-import android.support.v4.app.ActivityCompat.startActivityForResult
-
+import android.app.NotificationManager
+import android.content.Context
 
 
 class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +34,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     companion object {
         lateinit var notificationIntent: Intent
+        private val DND_CALLBACK_CODE = 1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +46,11 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         notificationIntent = Intent(this, NotificationService::class.java)
 
-        startService(notificationIntent)
+        if(Build.VERSION.SDK_INT < 23) {
+            startService(notificationIntent)
+        }else {
+            requestDndPermission()
+        }
 
         actionBarDrawerToggle = ActionBarDrawerToggle(this, drawer_layout, R.string.app_name, R.string.app_name)
         actionBarDrawerToggle.isDrawerIndicatorEnabled = true
@@ -74,6 +76,27 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
         return actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            DND_CALLBACK_CODE -> startService(notificationIntent)
+        }
+    }
+
+    private fun requestDndPermission(){
+        if(Build.VERSION.SDK_INT < 23) {
+            return
+        }
+
+        val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (notificationManager.isNotificationPolicyAccessGranted) {
+            startService(notificationIntent)
+        } else {
+            val intent = Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+            startActivityForResult(intent, DND_CALLBACK_CODE)
+        }
     }
 
     fun getUsersGeneralInfo() {
