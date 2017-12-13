@@ -45,7 +45,7 @@ class CheckoutActivity : BaseActivity() {
                 .setTitle(getString(R.string.checkout_warning_title))
                 .setMessage(getString(R.string.checkout_warning))
                 .setNegativeButton(getString(R.string.negative), {dialog, which -> dialog.dismiss()})
-                .setPositiveButton(getString(R.string.positive), { dialog, which ->  reference.setValue(CurrentStatus("krcvrgN98sUIX3biPJlvNZU4Xxm2", false))
+                .setPositiveButton(getString(R.string.positive), { dialog, which ->  reference.setValue(CurrentStatus(currentUser.uid, false))
                     dialog.dismiss()})
                 .create()
                 .show()

@@ -9,8 +9,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.home.HomeActivity
+import java.util.*
 
 class LoginActivity : BaseActivity() {
+
+    private val RC_SIGN_IN = 1
+    private val providers = Arrays.asList(AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

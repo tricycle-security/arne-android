@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         multiDexEnabled true
         applicationId "com.tricycle_sec.arne.arne"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -21,11 +21,13 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.google.firebase:firebase-database:11.4.2'
     testImplementation 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.firebaseui:firebase-ui-auth:3.1.0'
+    compile 'com.greysonparrelli.permiso:permiso:0.3.0'
 }
 
 apply plugin: 'kotlin-android'

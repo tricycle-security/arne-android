@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tricycle_sec.arne.arne">
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:allowBackup="true"
@@ -21,9 +23,19 @@
         <activity
             android:name=".home.HomeActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".checkout.CheckoutActivity"
+        <activity
+            android:name=".checkout.CheckoutActivity"
             android:parentActivityName=".home.HomeActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".services.NotificationService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity android:name=".response.ResponseActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".home.HomeActivity"/>
     </application>
 
 </manifest>

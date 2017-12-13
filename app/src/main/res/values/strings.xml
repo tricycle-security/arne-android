@@ -15,4 +15,15 @@
 
     <string name="positive">Ja</string>
     <string name="negative">Nee</string>
+
+    <string name="response_header_time">Er is om</string>
+    <string name="response_header_kind">"melding gegaan van een</string>
+    <string name="response_header_location">op locatie</string>
+    <string name="response_warning_title">Let op!</string>
+    <string name="response_warning_true">Door op JA te klikken bevestig je dat je direct zal reageren op het incident.</string>
+    <string name="response_warning_false">Door op NEE te klikken bevestig je dat je niet in staat bent om te reageren op het incident.</string>
+    <string name="response_completed_true">Je bent nu geregistreerd als aangemelde BHV-er.</string>
+    <string name="response_completed_false">Jouw afmelding voor dit incident is doorgegeven.</string>
+
+
 </resources>
