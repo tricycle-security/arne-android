@@ -7,6 +7,12 @@
             android:id="@+id/nav_menu_checkout"
             android:icon="@drawable/ic_card"
             android:title="@string/side_menu_checkout" />
+
+        <item
+            android:id="@+id/nav_menu_alerts"
+            android:icon="@drawable/ic_alert"
+            android:title="@string/side_menu_alerts" />
+
         <item
             android:id="@+id/nav_menu_logout"
             android:icon="@drawable/ic_exit"
