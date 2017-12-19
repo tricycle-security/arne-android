@@ -88,13 +88,17 @@ class AlertActivity : BaseActivity() {
         }
 
         override fun onBindViewHolder(holder: AlertViewHolder, position: Int) {
+            alerts = alertMap.map { it.value }.toMutableList()
             alerts.sortByDescending { it.time }
             alerts.sortByDescending { it.active }
             holder.view.title.text = alerts[position].kind
             holder.view.responders.text = String.format(getString(R.string.alert_responders), alerts[position].responders.size)
             holder.view.item_overlay.visibility = if(alerts[position].active) View.GONE else View.VISIBLE
-            if(alerts[position].responders.containsKey(currentUser.uid)) {
-                holder.view.responded.text = if(alerts[position].responders[currentUser.uid]!!.responding) getString(R.string.overview_responding) else getString(R.string.overview_not_responding)
+
+            if(alertMap[alerts[position].id]!!.responders.containsKey(currentUser.uid)) {
+                holder.view.responded.text = if(alertMap[alerts[position].id]!!.responders[currentUser.uid]!!.responding) getString(R.string.overview_responding) else getString(R.string.overview_not_responding)
+            }else {
+                holder.view.responded.text = ""
             }
 
             val sdf = SimpleDateFormat("dd-MM-yyyy")
