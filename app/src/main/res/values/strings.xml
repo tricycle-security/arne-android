@@ -36,5 +36,7 @@
     <string name="response_completed_false">Jouw afmelding voor dit incident is doorgegeven.</string>
     <string name="response_responded_true">Je hebt je al aangemeld als responder.</string>
     <string name="response_responded_false">Je hebt je al afgemeld als responder.</string>
+    <string name="response_not_going">Niet beschikbaar.</string>
+    <string name="response_going">Ik ga!</string>
 
 </resources>
