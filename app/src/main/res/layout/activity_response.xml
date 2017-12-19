@@ -98,7 +98,7 @@
                 android:layout_below="@+id/reject_button"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="4dp"
-                android:text="Niet beschikbaar."
+                android:text="@string/response_not_going"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
@@ -123,7 +123,7 @@
                 android:layout_below="@+id/accept_button"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="4dp"
-                android:text="Ik ga!"
+                android:text="@string/response_going"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
