@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tricycle_sec.arne.arne">
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
@@ -33,7 +34,11 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".response.ResponseActivity"
+        <activity
+            android:name=".response.ResponseActivity"
+            android:parentActivityName=".alerts.AlertActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".alerts.AlertActivity"
             android:screenOrientation="portrait"
             android:parentActivityName=".home.HomeActivity"/>
     </application>

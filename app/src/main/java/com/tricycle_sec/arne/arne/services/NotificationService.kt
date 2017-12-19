@@ -21,9 +21,6 @@ import com.tricycle_sec.arne.arne.response.ResponseActivity
 import android.net.Uri
 import android.media.AudioManager
 import android.support.v4.content.ContextCompat
-import com.greysonparrelli.permiso.Permiso
-import com.tricycle_sec.arne.arne.permissions.Permissions
-import java.io.Serializable
 
 
 class NotificationService : Service() {
@@ -109,7 +106,7 @@ class NotificationService : Service() {
     }
 
     private fun notifyUser(alert : Alert) {
-        if(alert!!.active) {
+        if(alert.active) {
             val intent = Intent(this@NotificationService, ResponseActivity::class.java)
             intent.putExtra(ALERT, alert)
 

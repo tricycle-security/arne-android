@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.tricycle_sec.arne.arne.R
+import com.tricycle_sec.arne.arne.alerts.AlertActivity
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.checkout.CheckoutActivity
 import com.tricycle_sec.arne.arne.home.HomeActivity
@@ -21,6 +22,7 @@ class NavigationDrawerHandler {
                 activity.startActivity(Intent(activity, LoginActivity::class.java))
             }
             R.id.nav_menu_checkout -> activity.startActivity(Intent(activity, CheckoutActivity::class.java))
+            R.id.nav_menu_alerts -> activity.startActivity(Intent(activity, AlertActivity::class.java))
             else -> {
             }
         }
