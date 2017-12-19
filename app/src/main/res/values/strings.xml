@@ -22,6 +22,8 @@
     <string name="alert_responders">Responders aangemeld: %d</string>
     <string name="alert_expired">INACTIEF</string>
 
+    <string name="overview_responding">Aangemeld</string>
+    <string name="overview_not_responding">Afgemeld</string>
     <string name="alert_type_header">Incident</string>
     <string name="alert_description_header">Extra informatie</string>
     <string name="response_header_time">Er is om</string>

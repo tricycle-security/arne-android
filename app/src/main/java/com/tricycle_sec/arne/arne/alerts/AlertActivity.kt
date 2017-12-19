@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,6 +28,7 @@ class AlertActivity : BaseActivity() {
     private var mappedAlerts: HashMap<String , Alert> = hashMapOf()
     private var adapter: AlertAdapter = AlertAdapter(mappedAlerts)
     private val alertRef = FirebaseDatabase.getInstance().getReference(BaseActivity.ALERT_PATH)
+    private val currentUser = FirebaseAuth.getInstance().currentUser as FirebaseUser
     private val alertListener = alertRef.addChildEventListener(object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
@@ -60,7 +63,6 @@ class AlertActivity : BaseActivity() {
 
         content_frame.layoutManager = LinearLayoutManager(this@AlertActivity)
         content_frame.adapter = adapter
-
     }
 
     override fun onResume() {
@@ -91,6 +93,9 @@ class AlertActivity : BaseActivity() {
             holder.view.title.text = alerts[position].kind
             holder.view.responders.text = String.format(getString(R.string.alert_responders), alerts[position].responders.size)
             holder.view.item_overlay.visibility = if(alerts[position].active) View.GONE else View.VISIBLE
+            if(alerts[position].responders.containsKey(currentUser.uid)) {
+                holder.view.responded.text = if(alerts[position].responders[currentUser.uid]!!.responding) getString(R.string.overview_responding) else getString(R.string.overview_not_responding)
+            }
 
             val sdf = SimpleDateFormat("dd-MM-yyyy")
             val cal = Calendar.getInstance()
