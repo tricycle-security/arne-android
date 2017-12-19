@@ -92,7 +92,7 @@ class AlertActivity : BaseActivity() {
             holder.view.responders.text = String.format(getString(R.string.alert_responders), alerts[position].responders.size)
             holder.view.item_overlay.visibility = if(alerts[position].active) View.GONE else View.VISIBLE
 
-            val sdf = SimpleDateFormat("hh:mm:ss")
+            val sdf = SimpleDateFormat("dd-MM-yyyy")
             val cal = Calendar.getInstance()
             cal.timeInMillis = alerts[position].time
             val time = sdf.format(cal.time)

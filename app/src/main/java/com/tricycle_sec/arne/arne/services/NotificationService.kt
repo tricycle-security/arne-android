@@ -106,7 +106,7 @@ class NotificationService : Service() {
     }
 
     private fun notifyUser(alert : Alert) {
-        if(alert!!.active) {
+        if(alert.active) {
             val intent = Intent(this@NotificationService, ResponseActivity::class.java)
             intent.putExtra(ALERT, alert)
 
@@ -121,12 +121,12 @@ class NotificationService : Service() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val granted = ContextCompat.checkSelfPermission(this, android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) == PackageManager.PERMISSION_GRANTED
                 if (granted) {
-                    //manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                    //manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
+                    manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                    manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
                 }
             }else {
-                //manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                //manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
+                manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
             }
 
             val contentView = RemoteViews(packageName, R.layout.custom_notification)
@@ -141,7 +141,7 @@ class NotificationService : Service() {
                     .setContentTitle(alert.kind)
                     .setContentText(alertText)
                     .setVibrate(longArrayOf(1000, 2000, 3000, 4000, 5000))
-                    //.setSound(sound)
+                    .setSound(sound)
                     .setLights(Color.RED, 500, 500)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
                     .setChannelId(channelId)
