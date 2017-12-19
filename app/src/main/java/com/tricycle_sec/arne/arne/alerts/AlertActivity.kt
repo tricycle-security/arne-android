@@ -19,32 +19,29 @@ import kotlinx.android.synthetic.main.activity_alert.*
 import kotlinx.android.synthetic.main.alert_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 class AlertActivity : BaseActivity() {
 
-    private var mappedAlerts: MutableMap<String , Alert> = mutableMapOf()
-    private var alerts = mutableListOf<Alert>()
-    private var adapter: AlertAdapter = AlertAdapter(alerts)
+    private var mappedAlerts: HashMap<String , Alert> = hashMapOf()
+    private var adapter: AlertAdapter = AlertAdapter(mappedAlerts)
     private val alertRef = FirebaseDatabase.getInstance().getReference(BaseActivity.ALERT_PATH)
     private val alertListener = alertRef.addChildEventListener(object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
             mappedAlerts.put(alert.id, alert)
-            alerts = mappedAlerts.map { it.value }.toMutableList()
             adapter.notifyDataSetChanged()
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
             mappedAlerts.put(alert.id, alert)
-            alerts = mappedAlerts.map { it.value }.toMutableList()
             adapter.notifyDataSetChanged()
         }
 
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
             mappedAlerts.remove(alert.id)
-            alerts = mappedAlerts.map { it.value }.toMutableList()
             adapter.notifyDataSetChanged()
         }
 
@@ -76,9 +73,11 @@ class AlertActivity : BaseActivity() {
         alertRef.removeEventListener(alertListener)
     }
 
-    inner class AlertAdapter(alerts: MutableList<Alert>) : RecyclerView.Adapter<AlertAdapter.AlertViewHolder>() {
+    inner class AlertAdapter(val alertMap: HashMap<String, Alert>) : RecyclerView.Adapter<AlertAdapter.AlertViewHolder>() {
+        var alerts = mutableListOf<Alert>()
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlertViewHolder {
             val view = layoutInflater.inflate(R.layout.alert_item, parent, false)
+            alerts = alertMap.map { it.value }.toMutableList()
             return AlertViewHolder(view)
         }
 
@@ -87,7 +86,8 @@ class AlertActivity : BaseActivity() {
         }
 
         override fun onBindViewHolder(holder: AlertViewHolder, position: Int) {
-            alerts.sortBy { !it.active }
+            alerts.sortByDescending { it.time }
+            alerts.sortByDescending { it.active }
             holder.view.title.text = alerts[position].kind
             holder.view.responders.text = String.format(getString(R.string.alert_responders), alerts[position].responders.size)
             holder.view.item_overlay.visibility = if(alerts[position].active) View.GONE else View.VISIBLE
@@ -100,7 +100,7 @@ class AlertActivity : BaseActivity() {
             holder.view.date.text = time
         }
 
-        override fun getItemCount() = alerts.size
+        override fun getItemCount() = mappedAlerts.size
 
         private fun onItemSelected(position: Int) {
             val item = alerts[position]
