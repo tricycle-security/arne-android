@@ -20,6 +20,7 @@
     <string name="negative">Nee</string>
 
     <string name="alert_responders">Responders aangemeld: %d</string>
+    <string name="alert_empty_text">Er zijn op dit moment geen meldingen.</string>
     <string name="alert_expired">INACTIEF</string>
 
     <string name="overview_responding">Aangemeld</string>

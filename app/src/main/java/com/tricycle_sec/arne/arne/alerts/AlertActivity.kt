@@ -34,18 +34,21 @@ class AlertActivity : BaseActivity() {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
             mappedAlerts.put(alert.id, alert)
             adapter.notifyDataSetChanged()
+            empty_screen.visibility = if(adapter.itemCount < 1) View.VISIBLE else View.GONE
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
             mappedAlerts.put(alert.id, alert)
             adapter.notifyDataSetChanged()
+            empty_screen.visibility = if(adapter.itemCount < 1) View.VISIBLE else View.GONE
         }
 
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {
             val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
             mappedAlerts.remove(alert.id)
             adapter.notifyDataSetChanged()
+            empty_screen.visibility = if(adapter.itemCount < 1) View.VISIBLE else View.GONE
         }
 
         override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String) {}
@@ -63,6 +66,7 @@ class AlertActivity : BaseActivity() {
 
         content_frame.layoutManager = LinearLayoutManager(this@AlertActivity)
         content_frame.adapter = adapter
+        empty_screen.visibility = if(adapter.itemCount < 1) View.VISIBLE else View.GONE
     }
 
     override fun onResume() {
