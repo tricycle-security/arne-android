@@ -24,15 +24,15 @@ class NotificationService : Service() {
 
     private val alertListener: ChildEventListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)
-            if (!alert!!.responders.containsKey(currentUser.uid)) {
+            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
+            if (!alert.responders.containsKey(currentUser.uid)) {
                 notifyUser(alert)
             }
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)
-            if (!alert!!.responders.containsKey(currentUser.uid)) {
+            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
+            if (!alert.responders.containsKey(currentUser.uid)) {
                 notifyUser(alert)
             }
         }
@@ -67,17 +67,17 @@ class NotificationService : Service() {
 
         userStatusRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)
-                if (userStatus!!.uuid == currentUser.uid) {
-                    alertListener(alertRef, userStatus!!.onLocation)
+                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)!!
+                if (userStatus.uuid == currentUser.uid) {
+                    alertListener(alertRef, userStatus.onLocation)
                 }
 
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)
-                if (userStatus!!.uuid == currentUser.uid) {
-                    alertListener(alertRef, userStatus!!.onLocation)
+                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)!!
+                if (userStatus.uuid == currentUser.uid) {
+                    alertListener(alertRef, userStatus.onLocation)
                 }
             }
 
@@ -102,8 +102,8 @@ class NotificationService : Service() {
         super.onDestroy()
     }
 
-    private fun notifyUser(alert : Alert) {
-        if(alert.active) {
+    private fun notifyUser(alert: Alert) {
+        if (alert.active) {
             val intent = Intent(this@NotificationService, ResponseActivity::class.java)
             intent.putExtra(ALERT, alert)
 
@@ -144,7 +144,7 @@ class NotificationService : Service() {
             notification.setContentIntent(resultPendingIntent)
 
             if (Build.VERSION.SDK_INT >= 26) {
-                val channel : NotificationChannel
+                val channel: NotificationChannel
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     channel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_HIGH)
                     val att = AudioAttributes.Builder()
