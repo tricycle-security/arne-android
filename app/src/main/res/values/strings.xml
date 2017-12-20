@@ -4,9 +4,12 @@
 
     <string name="title_attendancy">Aanwezigheid</string>
     <string name="title_checkout">Uitchecken</string>
+    <string name="title_alerts">Meldingen</string>
+    <string name="title_alert">Melding</string>
 
     <string name="side_menu_logout">Uitloggen</string>
     <string name="side_menu_checkout">Kaart uitchecken</string>
+    <string name="side_menu_alerts">Alerts</string>
 
     <string name="checkout_description">Hier kun je zien of jouw kaart ingecheckt is. Door op de kaart te tikken wordt de kaart uitgecheckt. Gelieve alleen te gebruiken als je bent vergeten uit te checken op locatie.</string>
     <string name="checkout_disclamer">Let op! Inchecken via de app is niet mogelijk.</string>
@@ -16,6 +19,14 @@
     <string name="positive">Ja</string>
     <string name="negative">Nee</string>
 
+    <string name="alert_responders">Responders aangemeld: %d</string>
+    <string name="alert_empty_text">Er zijn op dit moment geen meldingen.</string>
+    <string name="alert_expired">INACTIEF</string>
+
+    <string name="overview_responding">Aangemeld</string>
+    <string name="overview_not_responding">Afgemeld</string>
+    <string name="alert_type_header">Incident</string>
+    <string name="alert_description_header">Extra informatie</string>
     <string name="response_header_time">Er is om</string>
     <string name="response_header_kind">"melding gegaan van een</string>
     <string name="response_header_location">op locatie</string>
@@ -24,6 +35,9 @@
     <string name="response_warning_false">Door op NEE te klikken bevestig je dat je niet in staat bent om te reageren op het incident.</string>
     <string name="response_completed_true">Je bent nu geregistreerd als aangemelde BHV-er.</string>
     <string name="response_completed_false">Jouw afmelding voor dit incident is doorgegeven.</string>
-
+    <string name="response_responded_true">Je hebt je al aangemeld als responder.</string>
+    <string name="response_responded_false">Je hebt je al afgemeld als responder.</string>
+    <string name="response_not_going">Niet beschikbaar.</string>
+    <string name="response_going">Ik ga!</string>
 
 </resources>

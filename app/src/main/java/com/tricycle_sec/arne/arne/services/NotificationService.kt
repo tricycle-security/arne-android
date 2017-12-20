@@ -19,6 +19,8 @@ import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.response.ResponseActivity
 import android.net.Uri
 import android.media.AudioManager
+import android.support.v4.content.ContextCompat
+
 import android.support.annotation.RequiresApi
 
 class NotificationService : Service() {
@@ -103,8 +105,8 @@ class NotificationService : Service() {
         super.onDestroy()
     }
 
-    private fun notifyUser(alert: Alert) {
-        if (alert!!.active) {
+    private fun notifyUser(alert : Alert) {
+        if(alert.active) {
             val intent = Intent(this@NotificationService, ResponseActivity::class.java)
             intent.putExtra(ALERT, alert)
 

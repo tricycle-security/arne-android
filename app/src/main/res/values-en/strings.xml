@@ -4,9 +4,12 @@
 
     <string name="title_attendancy">Attendancy</string>
     <string name="title_checkout">Checkout</string>
+    <string name="title_alerts">Alerts</string>
+    <string name="title_alert">Alert</string>
 
     <string name="side_menu_logout">Logout</string>
     <string name="side_menu_checkout">Checkout card</string>
+    <string name="side_menu_alerts">Alerts</string>
 
     <string name="checkout_description">Here you can see if your card is checked in. By clicking on the card it will be checked out. Please only use this feature if you forgot to check out on location.</string>
     <string name="checkout_disclamer">Warning! Checking in is not possible.</string>
@@ -15,5 +18,26 @@
 
     <string name="positive">Yes</string>
     <string name="negative">No</string>
+
+    <string name="alert_responders">Attending responders: %d</string>
+    <string name="alert_empty_text">There are no alerts at this moment.</string>
+    <string name="alert_expired">INACTIVE</string>
+
+    <string name="overview_responding">Attending</string>
+    <string name="overview_not_responding">Away</string>
+    <string name="alert_type_header">Incident</string>
+    <string name="alert_description_header">Additional information</string>
+    <string name="response_header_time">At</string>
+    <string name="response_header_kind">"an incident has been reported of a</string>
+    <string name="response_header_location">at location</string>
+    <string name="response_warning_title">Warning!</string>
+    <string name="response_warning_true">By confirming you agree to immediately respond to this incident.</string>
+    <string name="response_warning_false">By declining you confirm that you are not able to respond to this incident.</string>
+    <string name="response_completed_true">You are now registered as an attending responder.</string>
+    <string name="response_completed_false">Your absence for this incident has been noted.</string>
+    <string name="response_responded_true">You have already signed up for this incident.</string>
+    <string name="response_responded_false">You have already dismissed this alert.</string>
+    <string name="response_not_going">Not available.</string>
+    <string name="response_going">I\'m going!</string>
 
 </resources>
