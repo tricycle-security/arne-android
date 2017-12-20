@@ -19,9 +19,6 @@ import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.response.ResponseActivity
 import android.net.Uri
 import android.media.AudioManager
-import android.support.v4.content.ContextCompat
-
-import android.support.annotation.RequiresApi
 
 class NotificationService : Service() {
 
@@ -155,6 +152,7 @@ class NotificationService : Service() {
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                             .build()
                     channel.setSound(sound, att)
+                    channel.setBypassDnd(true)
                     notificationManager.createNotificationChannel(channel)
                 }
             }
