@@ -5,8 +5,8 @@ import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import com.tricycle_sec.arne.arne.R
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Color
+import android.media.AudioAttributes
 import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
@@ -19,22 +19,20 @@ import com.tricycle_sec.arne.arne.firebase.CurrentStatus
 import com.tricycle_sec.arne.arne.response.ResponseActivity
 import android.net.Uri
 import android.media.AudioManager
-import android.support.v4.content.ContextCompat
-
 
 class NotificationService : Service() {
 
-    private val alertListener : ChildEventListener =  object : ChildEventListener {
+    private val alertListener: ChildEventListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)
-            if(!alert!!.responders.containsKey(currentUser.uid)){
+            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
+            if (!alert.responders.containsKey(currentUser.uid)) {
                 notifyUser(alert)
             }
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)
-            if(!alert!!.responders.containsKey(currentUser.uid)){
+            val alert = dataSnapshot.getValue<Alert>(Alert::class.java)!!
+            if (!alert.responders.containsKey(currentUser.uid)) {
                 notifyUser(alert)
             }
         }
@@ -57,7 +55,7 @@ class NotificationService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if(status) {
+        if (status) {
             onLocationListener()
         }
         return Service.START_STICKY
@@ -69,17 +67,17 @@ class NotificationService : Service() {
 
         userStatusRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)
-                if(userStatus!!.uuid == currentUser.uid){
-                    alertListener(alertRef, userStatus!!.onLocation)
+                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)!!
+                if (userStatus.uuid == currentUser.uid) {
+                    alertListener(alertRef, userStatus.onLocation)
                 }
 
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)
-                if(userStatus!!.uuid == currentUser.uid){
-                    alertListener(alertRef, userStatus!!.onLocation)
+                val userStatus = dataSnapshot.getValue<CurrentStatus>(CurrentStatus::class.java)!!
+                if (userStatus.uuid == currentUser.uid) {
+                    alertListener(alertRef, userStatus.onLocation)
                 }
             }
 
@@ -92,9 +90,9 @@ class NotificationService : Service() {
     }
 
     private fun alertListener(alertRef: DatabaseReference, onLocation: Boolean) {
-        if(onLocation){
+        if (onLocation) {
             alertRef.addChildEventListener(alertListener)
-        }else{
+        } else {
             alertRef.removeEventListener(alertListener)
         }
     }
@@ -104,28 +102,26 @@ class NotificationService : Service() {
         super.onDestroy()
     }
 
-    private fun notifyUser(alert : Alert) {
-        if(alert.active) {
+    private fun notifyUser(alert: Alert) {
+        if (alert.active) {
             val intent = Intent(this@NotificationService, ResponseActivity::class.java)
             intent.putExtra(ALERT, alert)
 
             val resultPendingIntent = PendingIntent.getActivity(this@NotificationService, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
             val sound = Uri.parse("android.resource://" + packageName + "/" + R.raw.alarm)
             val channelId = "channel_01"
             val alertText = String.format("%s \nLocatie: %s", alert.description, alert.location)
 
-            val manager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val granted = ContextCompat.checkSelfPermission(this, android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS) == PackageManager.PERMISSION_GRANTED
-                if (granted) {
-                    manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                    manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (notificationManager.isNotificationPolicyAccessGranted) {
+                    audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                    audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION), AudioManager.FLAG_PLAY_SOUND)
                 }
-            }else {
-                manager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                manager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 8, AudioManager.FLAG_PLAY_SOUND)
+            } else {
+                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION), AudioManager.FLAG_PLAY_SOUND)
             }
 
             val contentView = RemoteViews(packageName, R.layout.custom_notification)
@@ -147,8 +143,18 @@ class NotificationService : Service() {
 
             notification.setContentIntent(resultPendingIntent)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationManager.createNotificationChannel(NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_HIGH))
+            if (Build.VERSION.SDK_INT >= 26) {
+                val channel: NotificationChannel
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    channel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_HIGH)
+                    val att = AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build()
+                    channel.setSound(sound, att)
+                    channel.setBypassDnd(true)
+                    notificationManager.createNotificationChannel(channel)
+                }
             }
 
             val buildedNotification = notification.build()

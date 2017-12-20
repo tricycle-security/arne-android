@@ -1,9 +1,9 @@
 package com.tricycle_sec.arne.arne.base
 
+import android.support.v7.app.AppCompatActivity
 import com.google.firebase.database.*
-import com.greysonparrelli.permiso.PermisoActivity
 
-open class BaseActivity : PermisoActivity() {
+open class BaseActivity : AppCompatActivity() {
 
     companion object {
         val USER_PATH = "userinfo/usergeninfo"
