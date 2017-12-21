@@ -16,8 +16,13 @@
     <string name="checkout_warning">Are you sure you want to check out now?</string>
     <string name="checkout_warning_title">Warning!</string>
 
+    <string name="login_warning_title">Oops..</string>
+    <string name="login_warning_message">This user is currently disabled. Please contact the administrator or log in with a different user.</string>
+
+
     <string name="positive">Yes</string>
     <string name="negative">No</string>
+    <string name="ok">OK</string>
 
     <string name="alert_responders">Attending responders: %d</string>
     <string name="alert_empty_text">There are no alerts at this moment.</string>

@@ -38,6 +38,7 @@ class CheckoutActivity : BaseActivity() {
         })
 
         card_image.setOnClickListener { checkOutCard() }
+        checkUserStatus(getString(R.string.login_warning_title), getString(R.string.login_warning_message), getString(R.string.ok))
     }
 
     fun checkOutCard() {
