@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.tricycle_sec.arne.arne.home.HomeActivity
 import com.tricycle_sec.arne.arne.login.LoginActivity
 
 open class BaseActivity : AppCompatActivity() {
@@ -24,6 +25,9 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun checkUserStatus(title : String, message : String, button : String) {
+        if(FirebaseAuth.getInstance().currentUser == null) {
+            return
+        }
         val reference = getDatabaseReference(String.format(USER_STATUS_PATH, FirebaseAuth.getInstance().currentUser!!.uid))
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -33,6 +37,8 @@ open class BaseActivity : AppCompatActivity() {
                             .setTitle(title)
                             .setMessage(message)
                             .setNeutralButton(button, { dialog, which ->  FirebaseAuth.getInstance().signOut()
+                                reference.removeEventListener(this)
+                                this@BaseActivity.stopService(HomeActivity.notificationIntent)
                                 this@BaseActivity.startActivity(Intent(this@BaseActivity, LoginActivity::class.java))
                                 dialog.dismiss()})
                             .create()
