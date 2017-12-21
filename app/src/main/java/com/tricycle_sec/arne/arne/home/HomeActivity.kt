@@ -63,6 +63,7 @@ class HomeActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         getCurrentStatuses()
         getUsersGeneralInfo()
+        checkUserStatus(getString(R.string.login_warning_title), getString(R.string.login_warning_message), getString(R.string.ok))
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -9,8 +9,8 @@
     </style>
 
     <!-- FullScreen application theme. -->
-    <style name="FullScreenTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="FullScreenTheme" parent="Theme.AppCompat.NoActionBar"/>
 
-    </style>
+    <style name="CustomAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert"/>
 
 </resources>

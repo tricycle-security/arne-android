@@ -16,8 +16,12 @@
     <string name="checkout_warning">Weet je zeker dat je de kaart wilt uitchecken?</string>
     <string name="checkout_warning_title">Let op!</string>
 
+    <string name="login_warning_title">Oops..</string>
+    <string name="login_warning_message">Deze gebruiker is momenteel uitgeschakeld. Neem contact op met de administrator of log in met een andere gebruiker.</string>
+
     <string name="positive">Ja</string>
     <string name="negative">Nee</string>
+    <string name="ok">OK</string>
 
     <string name="alert_responders">Responders aangemeld: %d</string>
     <string name="alert_empty_text">Er zijn op dit moment geen meldingen.</string>

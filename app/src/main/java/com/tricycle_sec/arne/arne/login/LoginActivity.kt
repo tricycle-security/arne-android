@@ -3,9 +3,12 @@ package com.tricycle_sec.arne.arne.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.tricycle_sec.arne.arne.R
 import com.tricycle_sec.arne.arne.base.BaseActivity
 import com.tricycle_sec.arne.arne.home.HomeActivity
@@ -26,7 +29,7 @@ class LoginActivity : BaseActivity() {
 
         if (requestCode == RC_SIGN_IN) {
             when (resultCode) {
-                Activity.RESULT_OK -> startActivity(Intent(this, HomeActivity::class.java))
+                Activity.RESULT_OK -> checkStatus()
                 else -> promptLogin()
             }
         }
@@ -37,10 +40,32 @@ class LoginActivity : BaseActivity() {
         checkSession()
     }
 
+    private fun checkStatus() {
+        val reference = getDatabaseReference(String.format(USER_STATUS_PATH, FirebaseAuth.getInstance().currentUser!!.uid))
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val status = dataSnapshot.value as Boolean
+                if(status) {
+                    startActivity(Intent(this@LoginActivity, HomeActivity::class.java))
+                }else {
+                    AlertDialog.Builder(this@LoginActivity, R.style.CustomAlertDialogStyle)
+                            .setTitle(getString(R.string.login_warning_title))
+                            .setMessage(getString(R.string.login_warning_message))
+                            .setNeutralButton(getString(R.string.ok), { dialog, which ->  FirebaseAuth.getInstance().signOut()
+                                dialog.dismiss()
+                                promptLogin()})
+                            .create()
+                            .show()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
     private fun checkSession() {
         when (FirebaseAuth.getInstance().currentUser) {
             null -> promptLogin()
-            else -> startActivity(Intent(this, HomeActivity::class.java))
+            else -> checkStatus()
         }
     }
 

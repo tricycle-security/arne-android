@@ -66,6 +66,7 @@ class ResponseActivity : BaseActivity() {
 
         accept_button.setOnClickListener { postResponse(true) }
         reject_button.setOnClickListener { postResponse(false) }
+        checkUserStatus(getString(R.string.login_warning_title), getString(R.string.login_warning_message), getString(R.string.ok))
     }
 
     private fun postResponse(responding: Boolean) {

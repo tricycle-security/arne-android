@@ -67,6 +67,7 @@ class AlertActivity : BaseActivity() {
         content_frame.layoutManager = LinearLayoutManager(this@AlertActivity)
         content_frame.adapter = adapter
         empty_screen.visibility = if(adapter.itemCount < 1) View.VISIBLE else View.GONE
+        checkUserStatus(getString(R.string.login_warning_title), getString(R.string.login_warning_message), getString(R.string.ok))
     }
 
     override fun onResume() {
