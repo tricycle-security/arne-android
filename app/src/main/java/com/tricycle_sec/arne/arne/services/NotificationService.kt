@@ -103,6 +103,10 @@ class NotificationService : Service() {
     }
 
     private fun notifyUser(alert: Alert) {
+        if(!status) {
+            return
+        }
+
         if (alert.active) {
             val intent = Intent(this@NotificationService, ResponseActivity::class.java)
             intent.putExtra(ALERT, alert)
