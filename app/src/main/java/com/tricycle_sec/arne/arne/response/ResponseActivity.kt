@@ -73,6 +73,16 @@ class ResponseActivity : BaseActivity() {
         checkUserStatus(getString(R.string.login_warning_title), getString(R.string.login_warning_message), getString(R.string.ok))
     }
 
+    override fun onResume() {
+        super.onResume()
+        NotificationService.status = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        NotificationService.status = true
+    }
+
     private fun postResponse(responding: Boolean) {
         val message = if (responding) getString(R.string.response_warning_true) else getString(R.string.response_warning_false)
         val reference = getDatabaseReference(String.format(RESPONSE_PATH, alert.id, currentUser.uid))
